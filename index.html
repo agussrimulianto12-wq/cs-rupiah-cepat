@@ -15,12 +15,24 @@
 <meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#0759c7">
 
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+
+/* Consent Mode v2: izin Analytics hanya aktif setelah disetujui pengunjung. */
+const analyticsConsent = localStorage.getItem('cpr_analytics_consent');
+gtag('consent', 'default', {
+  'analytics_storage': analyticsConsent === 'granted' ? 'granted' : 'denied',
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'wait_for_update': 500
+});
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CDFXM3KDGJ"></script>
 <script>
-window.dataLayer=window.dataLayer||[];
-function gtag(){dataLayer.push(arguments);}
-gtag('js',new Date());
-gtag('config','G-CDFXM3KDGJ');
+gtag('js', new Date());
+gtag('config', 'G-CDFXM3KDGJ', { 'anonymize_ip': true });
 </script>
 
 <style>
@@ -53,6 +65,10 @@ main section{scroll-margin-top:76px}
 footer{background:#0c172a;color:#dfe7f1;padding:35px 20px;text-align:center}
 footer p{max-width:850px;margin:8px auto}
 .wa{position:fixed;right:20px;bottom:20px;background:var(--green);color:#fff;text-decoration:none;padding:13px 18px;border-radius:999px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.cookie-banner{position:fixed;left:16px;right:16px;bottom:16px;z-index:10000;max-width:760px;margin:auto;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 16px 45px rgba(0,0,0,.28);display:none}
+.cookie-banner.show{display:block}.cookie-banner p{margin:0 0 14px}.cookie-actions{display:flex;flex-wrap:wrap;gap:10px}
+.cookie-btn{border:0;border-radius:999px;padding:11px 18px;font:inherit;font-weight:800;cursor:pointer;background:var(--blue);color:#fff}.cookie-btn.reject{background:#e8eef7;color:#172033}
+.privacy-settings{border:0;background:transparent;color:#dfe7f1;text-decoration:underline;font:inherit;cursor:pointer;padding:4px}
 @media(max-width:760px){nav ul{display:none}.grid{grid-template-columns:1fr}.contact dl{grid-template-columns:1fr;gap:3px}dd{margin-bottom:12px}.hero{padding:68px 18px}}
 
 .floating-social{
@@ -209,6 +225,7 @@ footer p{max-width:850px;margin:8px auto}
 <p><strong>CP Rupiah Cepat</strong> — halaman informasi bantuan pelanggan.</p>
 <p>Pastikan informasi kontak dan instruksi pembayaran selalu diverifikasi melalui kanal resmi perusahaan.</p>
 <p>© 2026 cprupiahcepat.com</p>
+<p><button class="privacy-settings" type="button" onclick="bukaPengaturanCookie()">Pengaturan cookie</button></p>
 </footer>
 
 
@@ -220,5 +237,35 @@ footer p{max-width:850px;margin:8px auto}
 </div>
 
 <a class="wa" href="https://wa.me/628136167501" rel="nofollow noopener" aria-label="Buka WhatsApp">WhatsApp</a>
+
+<section class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Persetujuan cookie" aria-describedby="cookie-description">
+  <p id="cookie-description"><strong>Izin Analytics</strong><br>Kami menggunakan cookie Analytics untuk memahami kunjungan dan meningkatkan situs. Anda dapat menerima atau menolak cookie Analytics. Cookie iklan tetap dinonaktifkan.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn" type="button" onclick="simpanIzinAnalytics('granted')">Terima Analytics</button>
+    <button class="cookie-btn reject" type="button" onclick="simpanIzinAnalytics('denied')">Tolak</button>
+  </div>
+</section>
+
+<script>
+(function () {
+  const banner = document.getElementById('cookie-banner');
+  if (!localStorage.getItem('cpr_analytics_consent')) banner.classList.add('show');
+})();
+
+function simpanIzinAnalytics(status) {
+  localStorage.setItem('cpr_analytics_consent', status);
+  gtag('consent', 'update', {
+    'analytics_storage': status,
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied'
+  });
+  document.getElementById('cookie-banner').classList.remove('show');
+}
+
+function bukaPengaturanCookie() {
+  document.getElementById('cookie-banner').classList.add('show');
+}
+</script>
 </body>
 </html>
